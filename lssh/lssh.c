@@ -68,6 +68,10 @@ int main(void)
     // How many command line args the user typed
     int args_count;
 
+    //tracks background tasks
+
+    int noHangUp = 0;
+
     // Shell loops forever (until we tell it to exit)
     while (1)
     {
@@ -113,6 +117,12 @@ int main(void)
             continue;
         }
 
+        if (strcmp(args[args_count -1], "&") == 0) 
+        {
+            args[args_count -1] = NULL;
+            noHangUp = 1;
+        }
+
 #if DEBUG
 
         // Some debugging output
@@ -135,7 +145,8 @@ int main(void)
         else
         {
             // Parent Process
-            wait(NULL);
+            if (noHangUp == 0)
+                wait(NULL);
         }
     }
 

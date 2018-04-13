@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define PROMPT "lambda-shell$ "
 
@@ -101,6 +103,13 @@ int main(void)
         #endif
         
         /* Add your code for implementing the shell's logic here */
+        if(fork() == 0)
+        {
+            execvp(args[0], args);
+        } else
+        {
+            wait(NULL);
+        }
         
     }
 

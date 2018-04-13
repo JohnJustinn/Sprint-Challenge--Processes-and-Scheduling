@@ -4,6 +4,8 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h>
+#include <signal.h>
 
 #define PROMPT "lambda-shell$ "
 
@@ -89,6 +91,25 @@ int main(void)
         // Exit the shell if args[0] is the built-in "exit" command
         if (strcmp(args[0], "exit") == 0) {
             break;
+        }
+
+        // Uses chDir() to change directory
+
+        else if (strcmp(args[0], "cd") == 0)
+        {
+            char *homeDirectory = getenv("HOME");
+            char *directory = (args_count > 1) ? args[1] : homeDirectory;
+
+            if (chdir(directory) == 0)
+            {
+                char *getcwd_buffer;
+                char *currentDirectory = getcwd(getcwd_buffer, 128);
+                printf("Current directory changed to '%s'\n", currentDirectory);
+            } else
+            {
+                printf("Failed to change directoy\n");
+                continue;
+            }
         }
 
         #if DEBUG
